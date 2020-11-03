@@ -15,6 +15,18 @@ Vi = 100;             % Input Voltage
 
 % y(1) = d (I_ind);    y(2) = d (V_cap);
 %        /dt               /dt
-y = [-R/L, -1/L; 1/C, 0]*x + [1/L; 0]*Vi;
+y =@(t,x) [-R/L, -1/L; 1/C, 0]*x + [1/L; 0]*Vi;
 
-%% O
+%% ODE Solver 
+[t, x] = ode45(@(t,x) y(t,x), tspan, x0); 
+
+% Plot Current thru Inductor & Voltage across Capacitor
+I_ind = x(:,1);    V_cap = x(:,2);
+
+subplot(2,1,1);
+plot(t, Vc, 'r', 'linewidth',0.75); grid on;title('Series RLC Circuit - Voltage across Capacitor'); 
+    xlabel('Time (sec)'); ylabel('Voltage (V)');
+    
+    subplot(2,1,2); plot(t, Ii, 'r', 'linewidth',0.75); grid on;
+    title('Series RLC Circuit - Current thru Inductor'); 
+    xlabel('Time (sec)'); ylabel('Current (A)');
