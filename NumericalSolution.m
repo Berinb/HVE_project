@@ -1,10 +1,20 @@
-%Here we will attempt to solve numberically the solution, using ode 
+%Numerical State Space Solution
+%Author: Berin Balje 
 
-%Step 1: Define parameter ranges
-%Step 2: Create Diff eq. Solver
-%Step 3: Loop throuth the parameters and obtain solution for each parameter
-%set
-%Step 4: Check the solution with the satandards
-%Step 5: If the solution passes the starndard save it if not discard
-%Step 6: Tabulate the solution that passed the standards 
+%% Pararameters
+T = 0.1;           % Simulation Time..
+x0 =  [0; 0];      % Initial Conditions
+tspan = [0, T];    % Time span 
 
+R = 10;               
+L = 100e-3;           
+C = 50e-6;            
+Vi = 100;             % Input Voltage
+
+%% RLC Circuit Dynamic - State-Space Model
+
+% y(1) = d (I_ind);    y(2) = d (V_cap);
+%        /dt               /dt
+y = [-R/L, -1/L; 1/C, 0]*x + [1/L; 0]*Vi;
+
+%% O
