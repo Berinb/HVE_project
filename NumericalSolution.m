@@ -10,7 +10,7 @@ syms I(t)
 L = 1e-3;
 C = 1e-6;
 R = 510;
-V = 100000;
+V = 100;
 %% Representing Derivative by creating symbolic function 
 Di = diff(I);
 %% ODE
@@ -22,10 +22,24 @@ conds = [cond1 cond2];
 %% Solve ODE for I
 iSol(t) = dsolve(ode,conds);
 iSol = simplify(iSol);
-%% Plotting 
-t = linspace(0,350e-6);  % for a 10/350 pulse. At t = 350us the current amplitude should be 50% of the I_peak
-plot(t,iSol(t));
+%% Voltage across capacitor 
 
+v = int(iSol)+V;
+
+%% Plotting 
+t = linspace(0,1);  % for a 10/350 pulse. At t = 350us the current amplitude should be 50% of the I_peak
+
+subplot(2,1,2)
+plot(t,iSol(t));
+title('Inductor current')
+xlabel('Time[s]')
+ylabel('i(t)')
+
+subplot(2,1,1)
+plot(t,v(t))
+title('Voltage across capacitor')
+xlabel('Time[s]')
+ylabel('v(t)')
 %% Q and W/R within 5 ms 
 
 Q = int(iSol,0,5e-3) % copy the answer in the command window and click enter to get the numerical result 
