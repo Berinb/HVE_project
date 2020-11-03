@@ -27,18 +27,18 @@ iSol(t) = dsolve(ode,conds);
 v = (1/C)*int(iSol)+Vi;
 
 %% rise time array 
-t = linspace(0,0.00005);  % from t = 0 to t = t1 ( rise time of pulse)
+t = linspace(0,0.00);  % from t = 0 to t = t1 ( rise time of pulse)
 
-%% Exponentially decaying part 
+%% Exponentially decaying part RL circuit when SG2 is ignited
 i_peak = double(max(iSol(t)));
-t_fall = linspace(0,350e-6);
+t_fall = linspace(0,100e-6);
 i_exp = i_peak*(exp(-t_fall/tau));
 
 %% Plotting 
 subplot(2,1,2)
 hold on
 plot(t,iSol(t));
-plot(linspace(t(end),350e-6),i_exp);
+plot(linspace(t(end),100e-6),i_exp);
 hold off
 title('Inductor current')
 xlabel('Time[s]')
