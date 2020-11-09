@@ -10,7 +10,7 @@ R = 100;
 L = 100e-3;           
 C = 50e-6;            
 Vi = 100;             % Input Voltage
-
+Rexp=1;
 %% RLC Circuit Dynamic Model -> State-Space Model (When Spark gap 1 is conducting)
 
 % y(1) = d (I_ind);    y(2) = d (V_cap);
@@ -25,25 +25,31 @@ I_ind = x(:,1);    V_cap = x(:,2);
 
 figure(1)
 subplot(2,1,1);
-plot(t, V_cap, 'b', 'linewidth',0.75); 
-grid on;
-title('Series RLC Circuit (Spark Gap 1) Voltage across Capacitor'); 
-xlabel('Time (sec)');
-ylabel('Voltage (V)');
-    
-subplot(2,1,2);
 plot(t, I_ind, 'r', 'linewidth',0.75);
 grid on;
 title('Series RLC Circuit (Spark Gap 1) Current thru Inductor'); 
 xlabel('Time (sec)');
 ylabel('Current (A)');
 
+subplot(2,1,2);
+plot(t, V_cap, 'b', 'linewidth',0.75); 
+grid on;
+title('Series RLC Circuit (Spark Gap 1) Voltage across Capacitor'); 
+xlabel('Time (sec)');
+ylabel('Voltage (V)');
+
+
 %% RL circuit model -> exponential decay  (When spark gap 2 is conducting)
 
-tau=L/(R);
+tau=L/(Rexp);
 t2=0:(t(2)-t(1)):tau*6;
 I_decay= max(I_ind)*exp(-(t2)/(tau))';
 figure(2)
+plot(t2,I_decay)
+title('Series RL Circuit (Spark Gap 2) Current thru Inductor'); 
+xlabel('Time (sec)');
+ylabel('Current (A)');
+grid on
 
 %% Combining  parts of spark gap 1 and spark gap 2
 
