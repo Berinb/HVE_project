@@ -6,50 +6,61 @@
 %% Symbolic I(t)
 syms I(t) 
 %% parameters
-R = 100;               
+R = 10;       
+Rp = 10;
 L =1e-3;           
-C = 50e-6;            
-Vi = 100;
+C = 10e-6;            
+Vi = 100000;
 tau = L/R;
 %% Representing Derivative by creating symbolic function 
 Di = diff(I);
 %% ODE
-ode = L*diff(I,t,2)+ R*diff(I,t)+(1/C)*I(t) == 0;
+ode = L*diff(I,t,2)+ (R+Rp)*diff(I,t)+(1/C)*I(t) == 0;
 %% ICs
 cond1 = I(0)==0;
 cond2 = L*Di(0)==Vi;
 conds = [cond1 cond2];
 %% Solve ODE for I
 iSol(t) = dsolve(ode,conds);
- iSol = simplify(iSol);
+iSol = simplify(iSol);
 %% Voltage across capacitor 
 
 v = (1/C)*int(iSol)+Vi;
 
 %% rise time array 
-t = linspace(0,5e-5);  % from t = 0 to t = t1 ( rise time of pulse)
+t = linspace(0,5e-3);  % from t = 0 to t = t1 ( rise time of pulse)
 
 %% Exponentially decaying part RL circuit when SG2 is ignited
 i_peak = double(max(iSol(t)));
 t_fall = linspace(0,3e-4);
 i_exp = i_peak*(exp(-t_fall/tau));
 
-%% Plotting 
+%% Plotting Voltage across capacitor and current through inductor due to SG1 ignition
 subplot(2,1,2)
-hold on
 plot(t,iSol(t));
-plot(linspace(t(end),3.5e-4),i_exp);
-hold off
 title('Inductor current')
 xlabel('Time[s]')
-ylabel('i(t)')
+ylabel('i(t) [A]')
 
-% subplot(2,1,1)
-%  
-% plot(t,v(t))
-% title('Voltage across capacitor')
-% xlabel('Time[s]')
-% ylabel('v(t)')
+subplot(2,1,1)
+plot(t,v(t))
+title('Voltage across capacitor')
+xlabel('Time[s]')
+ylabel('v(t)')
+
+%% Combining ignition of SG1 at t = 0 and ignition of SG2 at t = 50us
+plot(linspace(t(end),3.5e-4),i_exp);
+
+
+
+
+
+
+
+
+
+
+
 
 %% Q and W/R within 5 ms 
 
