@@ -1,13 +1,11 @@
 % Analytical solution of ODE 
 % Author : Muaaz Amjad
 
-
-
 %% Symbolic I(t)
 syms I(t) 
 %% parameters
-R = 10;       
-Rp = 10;
+R = 30;       
+Rp = 20;
 L =1e-3;           
 C = 10e-6;            
 Vi = 100000;
@@ -27,15 +25,16 @@ iSol = simplify(iSol);
 
 v = (1/C)*int(iSol)+Vi;
 
-%% rise time array 
+%% Time array for SG1 ignition
 t = linspace(0,5e-3);  % from t = 0 to t = t1 ( rise time of pulse)
 
 %% Exponentially decaying part RL circuit when SG2 is ignited
 i_peak = double(max(iSol(t)));
-t_fall = linspace(0,3e-4);
+t_fall = linspace(0,3.5e-4);           % computing from t = 0 to 350us
 i_exp = i_peak*(exp(-t_fall/tau));
 
-%% Plotting Voltage across capacitor and current through inductor due to SG1 ignition
+%% Plotting Voltage across capacitor and current through inductor due to SG1 ignition for t = 0 to 5ms
+figure(1)
 subplot(2,1,2)
 plot(t,iSol(t));
 title('Inductor current')
@@ -46,10 +45,20 @@ subplot(2,1,1)
 plot(t,v(t))
 title('Voltage across capacitor')
 xlabel('Time[s]')
-ylabel('v(t)')
+ylabel('v(t) [V]')
 
 %% Combining ignition of SG1 at t = 0 and ignition of SG2 at t = 50us
-plot(linspace(t(end),3.5e-4),i_exp);
+
+t1 = linspace(0,5e-5);                   % Rise time array of pulse t = 0 to 50us 
+figure(2)
+hold on 
+plot(t1,iSol(t1));
+plot(linspace(t1(end),3.5e-4),i_exp);    % fall time array of pulse t = 50us to 350us
+hold off 
+title(' Current plot for SG1 and SG2 during specific time intervals');
+xlabel('time [s]');
+ylabel('i(t) [A]');
+
 
 
 
