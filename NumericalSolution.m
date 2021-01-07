@@ -3,13 +3,13 @@
 
 %% Pararameters
 T = 0.1;           % Simulation Time..
-x0 =  [0; 0];      % Initial Conditions
+x0 =  [0; 400];      % Initial Conditions
 tspan = [0, T];    % Time span 
 
-R = 100;               
-L = 100e-3;           
-C = 50e-6;            
-Vi = 100;             % Input Voltage
+R = 1.5;               
+L = 0;           
+C = 50e-3;            
+Vi = 0;             % Input Voltage
 Rexp=1;
 %% RLC Circuit Dynamic Model -> State-Space Model (When Spark gap 1 is conducting)
 
