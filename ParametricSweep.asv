@@ -37,12 +37,12 @@ Save = ones(resolution^2, 4); p=1;
         
         for r = 1: length(R)
                        
-          % Analytical solution of RLC circuit 
+           % Analytical solution of RLC circuit 
            alpha = (1/2)*((R+Rp)/L);
            w0 = 1/(sqrt(L*C));
-       if(((alpha^2) - (w0^2)) < 0)      % condition for underdamped solution         
-               e1 = - alpha + sqrt((alpha^2) - (w0^2));
-               e2 = - alpha - sqrt((alpha^2) - (w0^2));
+       if(((aplha^2) - (w0^2)) < 0)      % condition for underdamped solution         
+               e1 = - aplha + sqrt((aplha^2) - (w0^2));
+               e2 = - aplha - sqrt((aplha^2) - (w0^2));
                Ipulse = (U*(exp(e1*t)-exp(e2*t)))/((e1-e2)*L);
           
                
@@ -50,39 +50,32 @@ Save = ones(resolution^2, 4); p=1;
            Ipeak = max(Ipulse); 
            inx_peak = find(Ipulse == Ipeak);
            %Time when peak is reached
-           tpeak = t(inx_peak);
+           t_peak = t(inx_peak);
            % post processing of 10%,50%,90% 
             i90 = 0.9*Ipeak;      % y1
-            [~,inx_90] = find_near(Ipulse(1:inx_peak),i90); 
-            t90_all = t(1:inx_peak);
-            t90 = t90_all(inx_90);      %x1
+            inx_90 = find(Ipulse==i90); 
+            t90 = t(inx_90);      %x1
             i10 = 0.1*Ipeak;    % y2
-           [~,inx_10] = find_near(Ipulse(1:inx_peak),i10); 
-           t10_all = t(1:inx_peak);
-            t10 = t10_all(inx_10);   %x8
+            inx_10 = find(Ipulse==i10); 
+            t10 = t(inx_10);   %x8
             
             i50 = 0.5*Ipeak;
-           [~,inx_50] = find_near(Ipulse(inx_peak:end),i50); 
-           t50_all=t(inx_peak:end);
-            t50 = t50_all(inx_50);            
+            inx_50_all = find(Ipulse==i50);
+            t50 = inx_50_all(2);
             
-            x = linspace(0,tpeak+(tpeak*0.5),1000);       
+            
+            x = linspace(0,tpeak+(tpeak*0.5),500);       
             grad = (i10-i90)/(t10-t90);            
             line = grad*(x-t90) + i90; 
-            
-            hold on 
-            plot(t,Ipulse)
-            plot(x,line)
-            hold off
             
             % when is line = ipeak. Finding time for line peak to reach
             % Ipeak
             
-             [~,inx_linepeak] = find_near(line,Ipeak);
+            inx_linepeak = find(line == Ipeak);
             t100 = x(inx_linepeak);
             
             inx_linezero = find(line == 0);
-            t0 = x(1);
+            t0 = x(inx_linezero);
             
             % 8/20 us standard timing calculation 
             
@@ -107,7 +100,6 @@ Save = ones(resolution^2, 4); p=1;
     end
     
     % Create Excel 
-    xlswrite(num2str(s),Save);
     
       
 end

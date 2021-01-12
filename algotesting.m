@@ -1,43 +1,15 @@
-% Parametric Sweep for the Crowbar pulse genereator model
-% Author: Berin Balje
-% Company: FH Wels
+    R = 10;
+    Rp = 1;
+    L = 1e-4;
+    C = 1e-6;
+    U = 100e3;
 
-%% Define Range of parameters
 
-%Capacitor and protection Resistances stages
-stages = 10;
-C = 1e-6*ones(stages,1);
-Rp = 1 * ones(stages,1);
-U = 100e3 * ones(stages, 1);
-%Modify for parallel interconecction
-for i=1:length(C)
-    C(i)= i*C(1); 
-    Rp(i) = Rp(1)/i;
-    U(i) = U(1)*i;
-end
+    t = linspace(0,10e-5,1000);
 
-% L and R
-resolution = 5;
-L = linspace(10e-10, 10e-6, resolution);
-R = linspace(1, 1000, resolution); 
 
-% ODE paremeters
-T = 0.1;           % Simulation Time..
-x0 =  [0; 0];      % Initial Conditions
-t = linspace(0,3.5e-4,500);    % Time span 
 
-%% Main Loop 
-n=1;
-for s = 1: stages
-    
-%Save Matrix 
-Save = ones(resolution^2, 4); p=1;
- 
-    for l = 1: length(L)
-        
-        for r = 1: length(R)
-                       
-          % Analytical solution of RLC circuit 
+% Analytical solution of RLC circuit 
            alpha = (1/2)*((R+Rp)/L);
            w0 = 1/(sqrt(L*C));
        if(((alpha^2) - (w0^2)) < 0)      % condition for underdamped solution         
@@ -98,19 +70,3 @@ Save = ones(resolution^2, 4); p=1;
            p=p+1;
            end
       end 
-           disp(n);
-           n=n+1;
-           
-            
-        end
-          
-    end
-    
-    % Create Excel 
-    xlswrite(num2str(s),Save);
-    
-      
-end
-
-
-
